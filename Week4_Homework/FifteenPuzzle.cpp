@@ -1,17 +1,17 @@
 #include "Ranking.h"
-#include <windows.h>		//sleep()¸¦ À§ÇÑ ÇÔ¼ö
+#include <windows.h>		//sleep()ë¥¼ ìœ„í•œ í•¨ìˆ˜
 #include <stdlib.h>
 #include <conio.h>
 #include <string.h>
 #include <time.h>
-#define DIM 4				// 4x4 ÆÛÁñ
+#define DIM 4				// 4x4 í¼ì¦
 
 enum Direction { Left = 75, Right = 77, Up = 72, Down = 80 };
 static int DirKey[4] = { Left, Right, Up, Down };
-static int map[DIM][DIM];	// ÆÛÁñ ¸Ê
-static int x, y;			// ºóÄ­ÀÇ À§Ä¡ (Çà:y, ¿­:x)
-static int nMove;			// ÀÌµ¿ÇÑ È½¼ö
-static clock_t tStart;		// ±âÁØ ½Ã°¢
+static int map[DIM][DIM];	// í¼ì¦ ë§µ
+static int x, y;			// ë¹ˆì¹¸ì˜ ìœ„ì¹˜ (í–‰:y, ì—´:x)
+static int nMove;			// ì´ë™í•œ íšŸìˆ˜
+static clock_t tStart;		// ê¸°ì¤€ ì‹œê°
 
 static void init()
 {
@@ -20,9 +20,9 @@ static void init()
 	map[DIM - 1][DIM - 1] = 0;
 	x = DIM - 1; y = DIM - 1;
 
-	srand(time(NULL));	// ³­¼ö ¹ß»ı ½ÃÀÛ ¼³Á¤
-	tStart = clock();	// ±âÁØ ½Ã°¢ ¼³Á¤
-	nMove = 0;			// ÀÌµ¿ È½¼ö ÃÊ±âÈ­
+	srand(time(NULL));	// ë‚œìˆ˜ ë°œìƒ ì‹œì‘ ì„¤ì •
+	tStart = clock();	// ê¸°ì¤€ ì‹œê° ì„¤ì •
+	nMove = 0;			// ì´ë™ íšŸìˆ˜ ì´ˆê¸°í™”
 }
 
 static void display()
@@ -43,27 +43,27 @@ static void display()
 	printf("---------------\n\t");
 	clock_t t1 = clock();
 	double d = (double)(t1 - tStart) / CLOCKS_PER_SEC;
-	printf("\n\tÀÌµ¿ È½¼ö:%6d\n\t¼Ò¿ä ½Ã°£:%6.1f\n\n", nMove, d);
+	printf("\n\tì´ë™ íšŸìˆ˜:%6d\n\tì†Œìš” ì‹œê°„:%6.1f\n\n", nMove, d);
 }
 
 static bool move(int dir)
 {
-	if (dir == Right && x > 0)			// ¡æ : ¸Ç ¿ŞÂÊ ¿­ÀÎÁö °Ë»ç
+	if (dir == Right && x > 0)			// â†’ : ë§¨ ì™¼ìª½ ì—´ì¸ì§€ ê²€ì‚¬
 	{
 		map[y][x] = map[y][x - 1];
 		map[y][--x] = 0;
 	}
-	else if (dir == Left && x < DIM - 1)		// ¡ç : ¸Ç ¿À¸¥ÂÊ ¿­ÀÎÁö °Ë»ç
+	else if (dir == Left && x < DIM - 1)		// â† : ë§¨ ì˜¤ë¥¸ìª½ ì—´ì¸ì§€ ê²€ì‚¬
 	{
 		map[y][x] = map[y][x + 1];
 		map[y][++x] = 0;
 	}
-	else if (dir == Up && y < DIM - 1)	// ¡è : ¸Ç ¾Æ·¡ ÇàÀÎÁö °Ë»ç
+	else if (dir == Up && y < DIM - 1)	// â†‘ : ë§¨ ì•„ë˜ í–‰ì¸ì§€ ê²€ì‚¬
 	{
 		map[y][x] = map[y + 1][x];
 		map[++y][x] = 0;
 	}
-	else if (dir == Down && y > 0)		// ¡é : ¸Ç À­ ÇàÀÎÁö °Ë»ç
+	else if (dir == Down && y > 0)		// â†“ : ë§¨ ìœ— í–‰ì¸ì§€ ê²€ì‚¬
 	{
 		map[y][x] = map[y - 1][x];
 		map[--y][x] = 0;
@@ -104,20 +104,32 @@ int playFiteenPuzzle()
 	init();
 	display();
 	printRanking();
-	printf("\n ÆÛÁñÀ» ¼¯¾îÁÖ¼¼¿ä(¿£ÅÍ)...");
+	printf("\n í¼ì¦ì„ ì„ì–´ì£¼ì„¸ìš”(ì—”í„°)...");
 	_getche();
-	shuffle(100);			// ÆÛÁñ Á¶°¢À» 100¹ø ÀÌµ¿ÇØ ¼¯À½
-	printf("\n °ÔÀÓÀÌ ½ÃÀÛµË´Ï´Ù...");
+	shuffle(100);			// í¼ì¦ ì¡°ê°ì„ 100ë²ˆ ì´ë™í•´ ì„ìŒ
+	printf("\n ê²Œì„ì´ ì‹œì‘ë©ë‹ˆë‹¤...");
 	_getche();
 
-	nMove = 0;						// ÀÌµ¿ È½¼ö ÃÊ±âÈ­
-	tStart = clock();				// ±âÁØ ½Ã°¢À» Àç¼³Á¤
-	while (!isDone())				// °ÔÀÓ Á¾·á °Ë»ç
+	nMove = 0;						// ì´ë™ íšŸìˆ˜ ì´ˆê¸°í™”
+	tStart = clock();				// ê¸°ì¤€ ì‹œê°ì„ ì¬ì„¤ì •
+	while (!isDone())				// ê²Œì„ ì¢…ë£Œ ê²€ì‚¬
 	{
-		move(getDirKey());			// Å°¸¦ ¹Ş¾Æ ÆÛÁñÁ¶°¢ ÀÌµ¿
-		display();					// ÇöÀç »óÅÂ¸¦ È­¸é¿¡ Ãâ·Â
+		move(getDirKey());			// í‚¤ë¥¼ ë°›ì•„ í¼ì¦ì¡°ê° ì´ë™
+		display();					// í˜„ì¬ ìƒíƒœë¥¼ í™”ë©´ì— ì¶œë ¥
 	}
-	clock_t t1 = clock();			// ÇöÀç ½Ã°¢
+	clock_t t1 = clock();			// í˜„ì¬ ì‹œê°
 	double d = (double)(t1 - tStart) / CLOCKS_PER_SEC;
-	return addRanking(nMove, d);	//·©Å· °»½Å
+	return addRanking(nMove, d);	//ë­í‚¹ ê°±ì‹ 
+}
+
+extern int playFifteenPuzzle();
+
+
+void main()
+
+{
+	loadRanking("ranking.txt");
+	int rank = playFifteenPuzzle();
+	printRanking();
+	storeRanking("ranking.txt");
 }
